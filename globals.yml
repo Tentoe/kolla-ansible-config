@@ -61,7 +61,7 @@ kolla_internal_fqdn: "julia.fritz.box"
 # Docker client timeout in seconds.
 #docker_client_timeout: 120
 
-docker_configure_for_zun: "yes"
+#docker_configure_for_zun: "yes"
 
 ###################
 # Messaging options
@@ -257,7 +257,7 @@ enable_etcd: "yes"
 #enable_fluentd: "yes"
 #enable_freezer: "no"
 #enable_gnocchi: "no"
-#enable_grafana: "no"
+enable_grafana: "yes"
 #enable_heat: "{{ enable_openstack_core | bool }}"
 #enable_horizon: "{{ enable_openstack_core | bool }}"
 #enable_horizon_blazar: "{{ enable_blazar | bool }}"
@@ -296,12 +296,12 @@ enable_etcd: "yes"
 #enable_karbor: "no"
 #enable_kafka: "{{ enable_monasca | bool }}"
 #enable_kibana: "{{ 'yes' if enable_central_logging | bool or enable_monasca | bool else 'no' }}"
-enable_kuryr: "yes"
-#enable_magnum: "no"
-#enable_manila: "no"
+#enable_kuryr: "no"
+enable_magnum: "yes"
+enable_manila: "yes"
 #enable_manila_backend_generic: "no"
 #enable_manila_backend_hnas: "no"
-#enable_manila_backend_cephfs_native: "no"
+enable_manila_backend_cephfs_native: "yes"
 #enable_manila_backend_cephfs_nfs: "no"
 enable_mariabackup: "yes"
 #enable_masakari: "no"
@@ -333,7 +333,7 @@ enable_neutron_provider_networks: "yes"
 #enable_osprofiler: "no"
 #enable_panko: "no"
 #enable_placement: "{{ enable_nova | bool or enable_zun | bool }}"
-#enable_prometheus: "no"
+enable_prometheus: "yes"
 #enable_qdrouterd: "{{ 'yes' if om_rpc_transport == 'amqp' else 'no' }}"
 #enable_qinling: "no"
 #enable_rally: "no"
@@ -355,7 +355,7 @@ enable_neutron_provider_networks: "yes"
 #enable_vmtp: "no"
 #enable_watcher: "no"
 #enable_zookeeper: "{{ enable_kafka | bool }}"
-enable_zun: "yes"
+#enable_zun: "no"
 
 ##################
 # RabbitMQ options
@@ -492,7 +492,7 @@ enable_zun: "yes"
 ###################
 # Valid options are [ bind9 ]
 #designate_backend: "bind9"
-#designate_ns_record: "sample.openstack.org"
+#designate_ns_record: "intern.kurz.site"
 # Valid options are [ '', redis, etcd ]
 #designate_coordination_backend: "{{ 'redis' if enable_redis|bool else 'etcd' if enable_etcd|bool else '' }}"
 
