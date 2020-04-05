@@ -1,2 +1,7 @@
 #!/bin/bash
-openstack server stop $(openstack server list --all-projects -f value -c ID)
+
+for server in $(openstack server list --all-projects -f value -c ID)
+do
+echo $server
+openstack server stop $server
+done
