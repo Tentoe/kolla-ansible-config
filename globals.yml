@@ -423,8 +423,8 @@ enable_skydive: "yes"
 # Glance - Image Options
 ########################
 # Configure image backend.
-#glance_backend_ceph: "no"
-#glance_backend_file: "yes"
+glance_backend_ceph: "yes"
+glance_backend_file: "no"
 #glance_backend_swift: "no"
 #glance_backend_vmware: "no"
 #enable_glance_image_cache: "no"
