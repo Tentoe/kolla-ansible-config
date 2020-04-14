@@ -195,7 +195,8 @@ WEBSSO_INITIAL_CHOICE = "credentials"
 # and federation protocol combination (WEBSSO_IDP_MAPPING).
 WEBSSO_CHOICES = (
     ("credentials", _("Keystone Credentials")),
-    ("oidc", _("OpenID Connect")),
+#    ("oidc", _("OpenID Connect")),
+    ("openidtest_oidc", _("OpenID Connect")),
 #    ("saml2", _("Security Assertion Markup Language")),
 #    ("acme_oidc", "ACME - OpenID Connect"),
 #    ("acme_saml2", "ACME - SAML2"),
@@ -208,10 +209,11 @@ WEBSSO_CHOICES = (
 # specific WebSSO endpoint in keystone, otherwise it will use the value
 # as the protocol_id when redirecting to the WebSSO by protocol endpoint.
 # NOTE: The value is expected to be a tuple formatted as: (<idp_id>, <protocol_id>).
-#WEBSSO_IDP_MAPPING = {
+WEBSSO_IDP_MAPPING = {
+    "openidtest_oidc": ("openidtest", "oidc"),
 #    "acme_oidc": ("acme", "oidc"),
 #    "acme_saml2": ("acme", "saml2"),
-#}
+}
 
 # Disable SSL certificate checks (useful for self-signed certificates):
 #OPENSTACK_SSL_NO_VERIFY = True
