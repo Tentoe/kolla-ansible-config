@@ -210,7 +210,7 @@ WEBSSO_CHOICES = (
 # as the protocol_id when redirecting to the WebSSO by protocol endpoint.
 # NOTE: The value is expected to be a tuple formatted as: (<idp_id>, <protocol_id>).
 WEBSSO_IDP_MAPPING = {
-    "openidtest_oidc": ("openidtest", "oidc"),
+    "openidtest_oidc": ("openidtest", "openid"),
 #    "acme_oidc": ("acme", "oidc"),
 #    "acme_saml2": ("acme", "saml2"),
 }
