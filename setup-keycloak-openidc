@@ -1,0 +1,13 @@
+#!/bin/bash
+
+openstack identity provider create \
+  --remote-id http://julia:9080/auth/realms/kurz.site \
+  --remote-id https://julia:9443/auth/realms/kurz.site \
+  keycloak
+
+openstack mapping create --rules keycloak-rules.json keycloak_mapping
+
+openstack group create keycloak
+openstack project create main
+openstack role add --group keycloak --project main admin
+openstack federation protocol create openid --mapping keycloak_mapping --identity-provider keycloak

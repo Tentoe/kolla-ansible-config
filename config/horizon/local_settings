@@ -196,7 +196,8 @@ WEBSSO_INITIAL_CHOICE = "credentials"
 WEBSSO_CHOICES = (
     ("credentials", _("Keystone Credentials")),
 #    ("oidc", _("OpenID Connect")),
-    ("openidtest_oidc", _("OpenID Connect")),
+    ("openidhttps_oidc", _("Keycloak https")),
+    ("openidhttp_oidc", _("Keycloak http")),
 #    ("saml2", _("Security Assertion Markup Language")),
 #    ("acme_oidc", "ACME - OpenID Connect"),
 #    ("acme_saml2", "ACME - SAML2"),
@@ -210,7 +211,8 @@ WEBSSO_CHOICES = (
 # as the protocol_id when redirecting to the WebSSO by protocol endpoint.
 # NOTE: The value is expected to be a tuple formatted as: (<idp_id>, <protocol_id>).
 WEBSSO_IDP_MAPPING = {
-    "openidtest_oidc": ("openidtest", "openid"),
+    "openidhttps_oidc": ("keycloak", "openid"),
+    "openidhttps_oidc": ("keycloak2", "openid"),
 #    "acme_oidc": ("acme", "oidc"),
 #    "acme_saml2": ("acme", "saml2"),
 }
