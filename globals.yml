@@ -204,6 +204,7 @@ neutron_external_interface: "eno2"
 # Use these options to set the various log levels across all OpenStack projects
 # Valid options are [ True, False ]
 #openstack_logging_debug: "False"
+keystone_logging_debug: "True"
 
 # Enable core OpenStack services. This includes:
 # glance, keystone, neutron, nova, heat, and horizon.
@@ -239,7 +240,7 @@ enable_central_logging: "yes"
 #enable_ceph_dashboard: "{{ enable_ceph | bool }}"
 #enable_chrony: "yes"
 enable_cinder: "yes"
-#enable_cinder_backup: "yes"
+enable_cinder_backup: "no"
 #enable_cinder_backend_hnas_nfs: "no"
 #enable_cinder_backend_iscsi: "{{ enable_cinder_backend_lvm | bool or enable_cinder_backend_zfssa_iscsi | bool }}"
 enable_cinder_backend_lvm: "yes"

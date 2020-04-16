@@ -1,0 +1,22 @@
+[                                                                                         
+    {
+        "local": [
+            {
+                "user": {
+                    "name": "{0}"
+                },
+                "group": {
+                    "domain": {
+                        "name": "Default"
+                    },
+                    "name": "keycloak"
+                }
+            }
+        ],
+        "remote": [
+            {
+                "type": "OIDC-preferred_username"
+            }
+        ]
+    }
+]
