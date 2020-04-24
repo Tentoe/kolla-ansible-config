@@ -204,7 +204,6 @@ neutron_external_interface: "eno2"
 # Use these options to set the various log levels across all OpenStack projects
 # Valid options are [ True, False ]
 #openstack_logging_debug: "False"
-keystone_logging_debug: "True"
 
 # Enable core OpenStack services. This includes:
 # glance, keystone, neutron, nova, heat, and horizon.
@@ -225,7 +224,7 @@ keystone_logging_debug: "True"
 
 # OpenStack services can be enabled or disabled with these options
 #enable_aodh: "no"
-#enable_barbican: "no"
+enable_barbican: "yes"
 #enable_blazar: "no"
 # NOTE: This variable has been deprecated and will be removed in the U cycle.
 #enable_cadf_notifications: "no"
@@ -327,7 +326,7 @@ enable_neutron_provider_networks: "yes"
 #enable_neutron_port_forwarding: "no"
 #enable_nova_serialconsole_proxy: "no"
 #enable_nova_ssh: "yes"
-#enable_octavia: "no"
+enable_octavia: "yes"
 #enable_onos: "no"
 #enable_opendaylight: "no"
 #enable_openvswitch: "{{ enable_neutron | bool and neutron_plugin_agent != 'linuxbridge' }}"

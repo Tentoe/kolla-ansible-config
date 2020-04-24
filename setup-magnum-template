@@ -1,0 +1,16 @@
+#!/bin/bash
+
+openstack coe cluster template create \
+	--keypair default \
+	--external-network provider_network \
+	--coe kubernetes \
+        --network-driver flannel \
+	--docker-volume-size 3 \
+	--image fedora-coreos \
+	--flavor medium \
+	--master-flavor medium \
+	--floating-ip-disabled \
+	--tls-disabled \
+	--fixed-network default \
+	--fixed-subnet default \
+	test-template

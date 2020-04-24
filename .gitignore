@@ -1,3 +1,7 @@
 virtualenv
 
 *.keyring
+*.pem
+server_ca
+client_ca
+ceph.conf
