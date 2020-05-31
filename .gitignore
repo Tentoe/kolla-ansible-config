@@ -4,4 +4,8 @@ virtualenv
 *.pem
 server_ca
 client_ca
+
 ceph.conf
+
+*.builder
+*.ring.gz
