@@ -1,0 +1,3 @@
+
+0 3 * * * root duplicity --no-encryption --include /home --include /var/lib/docker/volumes/mariadb_backup/_data --exclude '**' / file:///media/bare-backup/julia/ >> /var/log/backup-julia
+

@@ -7,7 +7,7 @@ KOLLA_SWIFT_BASE_IMAGE="kolla/ubuntu-source-swift-base:train"
 mkdir -p /etc/kolla/config/swift
 
 CREATE_CONFIG="10 2 1"
-DISK_NUMS=(0 1 2 3)
+DISK_NUMS=(0 1 2 3 4 5 6 7)
 
 
 # Object Ring
