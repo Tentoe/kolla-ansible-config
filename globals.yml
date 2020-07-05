@@ -20,6 +20,12 @@ kolla_install_type: "source"
 # Valid option is Docker repository tag
 openstack_release: "train"
 
+# Docker image tag used by default.
+#openstack_tag: "{{ openstack_release ~ openstack_tag_suffix }}"
+
+# Suffix applied to openstack_release to generate openstack_tag.
+#openstack_tag_suffix: ""
+
 # Location of configuration overrides
 #node_custom_config: "/etc/kolla/config"
 
@@ -50,18 +56,22 @@ kolla_internal_fqdn: "julia.fritz.box"
 ################
 # Docker options
 ################
-# Below is an example of a private repository with authentication. Note the
-# Docker registry password can also be set in the passwords.yml file.
 
-#docker_registry: "192.168.178.26:5000"
-#docker_namespace: "companyname"
-#docker_registry_insecure: "yes"
-#docker_registry_username: "sam"
-#docker_registry_password: "correcthorsebatterystaple"
+# Custom docker registry settings:
+#docker_registry:
+#docker_registry_insecure: "{{ 'yes' if docker_registry else 'no' }}"
+#docker_registry_username:
+# docker_registry_password is set in the passwords.yml file.
+
+# Namespace of images:
+#docker_namespace: "kolla"
+
 # Docker client timeout in seconds.
 #docker_client_timeout: 120
 
-#docker_configure_for_zun: "yes"
+#docker_configure_for_zun: "no"
+#containerd_configure_for_zun: "no"
+#containerd_grpc_gid: 42463
 
 ###################
 # Messaging options
@@ -110,7 +120,7 @@ network_interface: "eno1"
 #cluster_address_family: "{{ network_address_family }}"
 #swift_storage_address_family: "{{ storage_address_family }}"
 #swift_replication_address_family: "{{ swift_storage_address_family }}"
-#migration_address_family: "{{ network_address_family }}"
+#migration_address_family: "{{ api_address_family }}"
 #tunnel_address_family: "{{ network_address_family }}"
 #octavia_network_address_family: "{{ api_address_family }}"
 #bifrost_network_address_family: "{{ network_address_family }}"
@@ -122,7 +132,7 @@ network_interface: "eno1"
 # addresses for that reason.
 neutron_external_interface: "eno2"
 
-# Valid options are [ openvswitch, linuxbridge, vmware_nsxv, vmware_nsxv3, vmware_dvs, opendaylight ]
+# Valid options are [ openvswitch, linuxbridge, vmware_nsxv, vmware_nsxv3, vmware_dvs ]
 # if vmware_nsxv3 is selected, enable_openvswitch MUST be set to "no" (default is yes)
 #neutron_plugin_agent: "openvswitch"
 
@@ -177,10 +187,17 @@ neutron_external_interface: "eno2"
 # allow clients to perform authentication.
 #kolla_enable_tls_internal: "no"
 #kolla_enable_tls_external: "{{ kolla_enable_tls_internal if kolla_same_external_internal_vip | bool else 'no' }}"
-#kolla_external_fqdn_cert: "{{ node_config }}/certificates/haproxy.pem"
-#kolla_internal_fqdn_cert: "{{ node_config }}/certificates/haproxy-internal.pem"
-#kolla_external_fqdn_cacert: "{{ node_config }}/certificates/haproxy-ca.crt"
-#kolla_internal_fqdn_cacert: "{{ node_config }}/certificates/haproxy-ca-internal.crt"
+#kolla_certificates_dir: "{{ node_config }}/certificates"
+#kolla_external_fqdn_cert: "{{ kolla_certificates_dir }}/haproxy.pem"
+#kolla_internal_fqdn_cert: "{{ kolla_certificates_dir }}/haproxy-internal.pem"
+#kolla_admin_openrc_cacert: ""
+#kolla_copy_ca_into_containers: "no"
+#kolla_verify_tls_backend: "yes"
+#haproxy_backend_cacert: "{{ 'ca-certificates.crt' if kolla_base_distro in ['debian', 'ubuntu'] else 'ca-bundle.trust.crt' }}"
+#haproxy_backend_cacert_dir: "/etc/ssl/certs"
+#kolla_enable_tls_backend: "no"
+#kolla_tls_backend_cert: "{{ kolla_certificates_dir }}/backend-cert.pem"
+#kolla_tls_backend_key: "{{ kolla_certificates_dir }}/backend-key.pem"
 
 ################
 # Region options
@@ -192,18 +209,12 @@ neutron_external_interface: "eno2"
 # in a multi-region deployment, and then only in the *first* region.
 #multiple_regions_names: ["{{ openstack_region_name }}"]
 
-##############
-# OpenDaylight
-##############
-#enable_opendaylight_qos: "no"
-#enable_opendaylight_l3: "yes"
-
 ###################
 # OpenStack options
 ###################
 # Use these options to set the various log levels across all OpenStack projects
 # Valid options are [ True, False ]
-#openstack_logging_debug: "True"
+#openstack_logging_debug: "False"
 
 # Enable core OpenStack services. This includes:
 # glance, keystone, neutron, nova, heat, and horizon.
@@ -226,17 +237,10 @@ neutron_external_interface: "eno2"
 #enable_aodh: "no"
 enable_barbican: "yes"
 #enable_blazar: "no"
-# NOTE: This variable has been deprecated and will be removed in the U cycle.
-#enable_cadf_notifications: "no"
 #enable_ceilometer: "no"
 #enable_ceilometer_ipmi: "no"
 #enable_cells: "no"
 enable_central_logging: "yes"
-#enable_ceph: "no"
-#enable_ceph_mds: "no"
-#enable_ceph_rgw: "no"
-#enable_ceph_nfs: "no"
-#enable_ceph_dashboard: "{{ enable_ceph | bool }}"
 #enable_chrony: "yes"
 enable_cinder: "yes"
 enable_cinder_backup: "yes"
@@ -258,6 +262,7 @@ enable_etcd: "yes"
 #enable_fluentd: "yes"
 #enable_freezer: "no"
 #enable_gnocchi: "no"
+#enable_gnocchi_statsd: "no"
 enable_grafana: "yes"
 #enable_heat: "{{ enable_openstack_core | bool }}"
 #enable_horizon: "{{ enable_openstack_core | bool }}"
@@ -274,6 +279,7 @@ enable_grafana: "yes"
 #enable_horizon_manila: "{{ enable_manila | bool }}"
 #enable_horizon_masakari: "{{ enable_masakari | bool }}"
 #enable_horizon_mistral: "{{ enable_mistral | bool }}"
+#enable_horizon_monasca: "{{ enable_monasca | bool }}"
 #enable_horizon_murano: "{{ enable_murano | bool }}"
 #enable_horizon_neutron_vpnaas: "{{ enable_neutron_vpnaas | bool }}"
 #enable_horizon_octavia: "{{ enable_octavia | bool }}"
@@ -327,9 +333,8 @@ enable_neutron_provider_networks: "yes"
 #enable_nova_serialconsole_proxy: "no"
 #enable_nova_ssh: "yes"
 #enable_octavia: "no"
-#enable_onos: "no"
-#enable_opendaylight: "no"
 #enable_openvswitch: "{{ enable_neutron | bool and neutron_plugin_agent != 'linuxbridge' }}"
+#enable_ovn: "{{ enable_neutron | bool and neutron_plugin_agent == 'ovn' }}"
 #enable_ovs_dpdk: "no"
 #enable_osprofiler: "no"
 #enable_panko: "no"
@@ -346,7 +351,7 @@ enable_skydive: "yes"
 #enable_solum: "no"
 #enable_storm: "{{ enable_monasca | bool }}"
 #enable_swift: "no"
-#nable_swift_s3api: "no"
+#enable_swift_s3api: "no"
 #enable_tacker: "no"
 #enable_telegraf: "no"
 #enable_tempest: "no"
@@ -368,37 +373,40 @@ enable_skydive: "yes"
 # to configure IPv6 in RabbitMQ server.
 #rabbitmq_server_additional_erl_args: ""
 
-##############
-# Ceph options
-##############
-# Ceph can be setup with a caching to improve performance. To use the cache you
-# must provide separate disks than those for the OSDs
-#ceph_enable_cache: "no"
+#################
+# MariaDB options
+#################
+# List of additional WSREP options
+#mariadb_wsrep_extra_provider_options: []
 
-# Set to no if using external Ceph without cephx.
+#######################
+# External Ceph options
+#######################
+# External Ceph - cephx auth enabled (this is the standard nowadays, defaults to yes)
 #external_ceph_cephx_enabled: "yes"
 
-# Ceph is not able to determine the size of a cache pool automatically,
-# so the configuration on the absolute size is required here, otherwise the flush/evict will not work.
-#ceph_target_max_bytes: ""
-#ceph_target_max_objects: ""
-
-# Valid options are [ forward, none, writeback ]
-#ceph_cache_mode: "writeback"
-
-# A requirement for using the erasure-coded pools is you must setup a cache tier
-# Valid options are [ erasure, replicated ]
-#ceph_pool_type: "replicated"
-
-# Integrate ceph rados object gateway with openstack keystone
-#enable_ceph_rgw_keystone: "no"
-
-# Set the pgs and pgps for pool
-# WARNING! These values are dependant on the size and shape of your cluster -
-# the default values are not suitable for production use. Please refer to the
-# Kolla Ceph documentation for more information.
-#ceph_pool_pg_num: 8
-#ceph_pool_pgp_num: 8
+# Glance
+#ceph_glance_keyring: "ceph.client.glance.keyring"
+#ceph_glance_user: "glance"
+#ceph_glance_pool_name: "images"
+# Cinder
+#ceph_cinder_keyring: "ceph.client.cinder.keyring"
+#ceph_cinder_user: "cinder"
+#ceph_cinder_pool_name: "volumes"
+#ceph_cinder_backup_keyring: "ceph.client.cinder-backup.keyring"
+#ceph_cinder_backup_user: "cinder-backup"
+#ceph_cinder_backup_pool_name: "backups"
+# Nova
+#ceph_nova_keyring: "{{ ceph_cinder_keyring }}"
+#ceph_nova_user: "nova"
+#ceph_nova_pool_name: "vms"
+# Gnocchi
+#ceph_gnocchi_keyring: "ceph.client.gnocchi.keyring"
+#ceph_gnocchi_user: "gnocchi"
+#ceph_gnocchi_pool_name: "gnocchi"
+# Manila
+#ceph_manila_keyring: "ceph.client.manila.keyring"
+#ceph_manila_user: "manila"
 
 #############################
 # Keystone - Identity Options
@@ -455,8 +463,8 @@ glance_backend_file: "no"
 #################
 # Gnocchi options
 #################
-# Valid options are [ file, ceph ]
-#gnocchi_backend_storage: "{{ 'ceph' if enable_ceph|bool else 'file' }}"
+# Valid options are [ file, ceph, swift ]
+#gnocchi_backend_storage: "{% if enable_swift | bool %}swift{% else %}file{% endif %}"
 
 # Valid options are [redis, '']
 #gnocchi_incoming_storage: "{{ 'redis' if enable_redis | bool else '' }}"
@@ -465,7 +473,7 @@ glance_backend_file: "no"
 # Cinder - Block Storage Options
 ################################
 # Enable / disable Cinder backends
-cinder_backend_ceph: "yes"
+#cinder_backend_ceph: "no"
 #cinder_backend_vmwarevc_vmdk: "no"
 #cinder_volume_group: "cinder-volumes"
 # Valid options are [ '', redis, etcd ]
@@ -494,13 +502,13 @@ cinder_backup_driver: "ceph"
 # Valid options are [ bind9 ]
 designate_backend: "bind9"
 designate_ns_record: "local"
-# Valid options are [ '', redis, etcd ]
-#designate_coordination_backend: "{{ 'redis' if enable_redis|bool else 'etcd' if enable_etcd|bool else '' }}"
+# Valid options are [ '', redis ]
+#designate_coordination_backend: "{{ 'redis' if enable_redis|bool else '' }}"
 
 ########################
 # Nova - Compute Options
 ########################
-#nova_backend_ceph: "{{ enable_ceph }}"
+#nova_backend_ceph: "no"
 
 # Valid options are [ qemu, kvm, vmware, xenapi ]
 #nova_compute_virt_type: "kvm"
@@ -520,9 +528,18 @@ designate_ns_record: "local"
 # Valid options are [ none, novnc, spice, rdp ]
 #nova_console: "novnc"
 
+##############################
+# Neutron - networking options
+##############################
+# Enable distributed floating ip for OVN deployments
+#neutron_ovn_distributed_fip: "no"
+
 #################
 # Hyper-V options
 #################
+
+# NOTE: Hyper-V support has been deprecated and will be removed in the Victoria cycle.
+
 # Hyper-V can be used as hypervisor
 #hyperv_username: "user"
 #hyperv_password: "password"
@@ -608,6 +625,9 @@ designate_ns_record: "local"
 ###################################
 # VMware - OpenStack VMware support
 ###################################
+
+# NOTE: VMware support has been deprecated and will be removed in the Victoria cycle.
+
 #vmware_vcenter_host_ip:
 #vmware_vcenter_host_username:
 #vmware_vcenter_host_password:
@@ -618,6 +638,9 @@ designate_ns_record: "local"
 #######################################
 # XenAPI - Support XenAPI for XenServer
 #######################################
+
+# NOTE: XenAPI support has been deprecated and will be removed in the Victoria cycle.
+
 # XenAPI driver use HIMN(Host Internal Management Network)
 # to communicate with XenServer host.
 #xenserver_himn_ip:
@@ -627,19 +650,26 @@ designate_ns_record: "local"
 ############
 # Prometheus
 ############
+#enable_prometheus_server: "{{ enable_prometheus | bool }}"
 #enable_prometheus_haproxy_exporter: "{{ enable_haproxy | bool }}"
 #enable_prometheus_mysqld_exporter: "{{ enable_mariadb | bool }}"
 #enable_prometheus_node_exporter: "{{ enable_prometheus | bool }}"
 #enable_prometheus_cadvisor: "{{ enable_prometheus | bool }}"
 #enable_prometheus_memcached: "{{ enable_prometheus | bool }}"
 #enable_prometheus_alertmanager: "{{ enable_prometheus | bool }}"
-#enable_prometheus_ceph_mgr_exporter: "{{ enable_prometheus | bool and enable_ceph | bool }}"
+#enable_prometheus_ceph_mgr_exporter: "no"
 #enable_prometheus_openstack_exporter: "{{ enable_prometheus | bool }}"
 #enable_prometheus_elasticsearch_exporter: "{{ enable_prometheus | bool and enable_elasticsearch | bool }}"
 #enable_prometheus_blackbox_exporter: "{{ enable_prometheus | bool }}"
 
 # List of extra parameters passed to prometheus. You can add as many to the list.
 #prometheus_cmdline_extras:
+
+# Example of setting endpoints for prometheus ceph mgr exporter.
+# You should add all ceph mgr's in your external ceph deployment.
+#prometheus_ceph_mgr_exporter_endpoints:
+#  - host1:port1
+#  - host2:port2
 
 #########
 # Freezer
