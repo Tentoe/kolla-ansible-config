@@ -1,0 +1,7 @@
+{
+    "git.ignoreLimitWarning": true,
+    "files.watcherExclude": {
+        "**/venv3/**": true,
+        "**/virtualenv/**": true
+    }
+}

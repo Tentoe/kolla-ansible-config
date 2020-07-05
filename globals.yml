@@ -203,7 +203,7 @@ neutron_external_interface: "eno2"
 ###################
 # Use these options to set the various log levels across all OpenStack projects
 # Valid options are [ True, False ]
-#openstack_logging_debug: "False"
+#openstack_logging_debug: "True"
 
 # Enable core OpenStack services. This includes:
 # glance, keystone, neutron, nova, heat, and horizon.
@@ -239,7 +239,7 @@ enable_central_logging: "yes"
 #enable_ceph_dashboard: "{{ enable_ceph | bool }}"
 #enable_chrony: "yes"
 enable_cinder: "yes"
-enable_cinder_backup: "no"
+enable_cinder_backup: "yes"
 #enable_cinder_backend_hnas_nfs: "no"
 #enable_cinder_backend_iscsi: "{{ enable_cinder_backend_lvm | bool or enable_cinder_backend_zfssa_iscsi | bool }}"
 enable_cinder_backend_lvm: "yes"
@@ -299,10 +299,10 @@ enable_grafana: "yes"
 #enable_kibana: "{{ 'yes' if enable_central_logging | bool or enable_monasca | bool else 'no' }}"
 #enable_kuryr: "no"
 enable_magnum: "yes"
-enable_manila: "yes"
+#enable_manila: "no"
 #enable_manila_backend_generic: "no"
 #enable_manila_backend_hnas: "no"
-enable_manila_backend_cephfs_native: "yes"
+#enable_manila_backend_cephfs_native: "yes"
 #enable_manila_backend_cephfs_nfs: "no"
 enable_mariabackup: "yes"
 #enable_masakari: "no"
@@ -326,7 +326,7 @@ enable_neutron_provider_networks: "yes"
 #enable_neutron_port_forwarding: "no"
 #enable_nova_serialconsole_proxy: "no"
 #enable_nova_ssh: "yes"
-enable_octavia: "yes"
+#enable_octavia: "no"
 #enable_onos: "no"
 #enable_opendaylight: "no"
 #enable_openvswitch: "{{ enable_neutron | bool and neutron_plugin_agent != 'linuxbridge' }}"
@@ -345,8 +345,8 @@ enable_redis: "yes"
 enable_skydive: "yes"
 #enable_solum: "no"
 #enable_storm: "{{ enable_monasca | bool }}"
-enable_swift: "yes"
-enable_swift_s3api: "yes"
+#enable_swift: "no"
+#nable_swift_s3api: "no"
 #enable_tacker: "no"
 #enable_telegraf: "no"
 #enable_tempest: "no"
@@ -465,14 +465,14 @@ glance_backend_file: "no"
 # Cinder - Block Storage Options
 ################################
 # Enable / disable Cinder backends
-#cinder_backend_ceph: "{{ enable_ceph }}"
+cinder_backend_ceph: "yes"
 #cinder_backend_vmwarevc_vmdk: "no"
 #cinder_volume_group: "cinder-volumes"
 # Valid options are [ '', redis, etcd ]
 #cinder_coordination_backend: "{{ 'redis' if enable_redis|bool else 'etcd' if enable_etcd|bool else '' }}"
 
 # Valid options are [ nfs, swift, ceph ]
-#cinder_backup_driver: "ceph"
+cinder_backup_driver: "ceph"
 #cinder_backup_share: ""
 #cinder_backup_mount_options_nfs: ""
 
